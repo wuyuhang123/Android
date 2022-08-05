@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">A</string>
+    <string name="jump_to_activitya_2">jump to ActivityA 2</string>
+    <string name="jump_to_activityb">jump to ActivityB</string>
+</resources>

@@ -1,8 +1,5 @@
 package com.example.myapplication;
 
-import android.text.TextUtils;
-import android.view.View;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -10,6 +7,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Main {
@@ -17,7 +15,11 @@ public class Main {
         System.out.println();
         Main main = new Main();
         main.maximalSquare(new char[][]{{'1', '0', '1', '0', '0'}, {'1', '0', '1', '1', '1'},{'1', '1', '1', '1', '1'},{'1', '0', '0', '1', '0'}});
-
+        main.findNumberOfLIS(new int[]{1,2,4,3,5,4,7,2});
+        Main.findTwoNumber(20);
+        String s = main.revertIp("10.0.3.193");
+        main.revertIp(String.valueOf(167969729));
+        main.zuobiao("A10;S20;W10;D30;X;A1A;B10A11;;A10;".split(";"));
     }
 
     public class TreeNode {
@@ -596,7 +598,7 @@ public class Main {
         if (length1 == 0){
             return 0;
         }
-        int length2 = matrix[0].length + 1;
+        int length2 = matrix[0].length;
         int[] dp = new int[length2];
         int res = 0;
         for (char[] chars : matrix) {
@@ -810,6 +812,284 @@ public class Main {
         return res;
     }
 
+    public ListNode detectCycle(ListNode head) {
+        //快慢指针，指针f，s分别为2，1，设环前为a，环为b，则两指针第一次相遇时，会有f = 2bn，s = bn，
+        //此时将f速度改为一并使其重置为首部，那么两指针再次相遇时的节点即为入口节点
+        if (head == null) return null;
+        ListNode s = head;
+        ListNode f = head.next;
+        while (f != s){
+            if (f == null || f.next == null) return null;
+            s = s.next;
+            f = f.next.next;
+        }
+        f = head;
+        s = s.next;
+        while (f != s){
+            s = s.next;
+            f = f.next;
+        }
+        return f;
+    }
 
+    public int findNumberOfLIS(int[] nums) {
+        //定义dp，为以i结尾的最长子序列长度，之后排序，整体时间复杂度为n^2
+        if (nums == null || nums.length == 0) return 0;
+        int[] dp = new int[nums.length];
+        int[] gp = new int[nums.length];
+        for (int i = 0; i < nums.length; i++){
+            dp[i] = 1;
+            gp[i] = 1;
+            for (int j = 0; j < i; j++){
+                if (nums[j] < nums[i]){
+                    if (dp[j] + 1 > dp[i]){
+                        dp[i] = dp[j] + 1;
+                        //此处不能是gp[i] = 1
+                        gp[i] = gp[j];
+                    }else if (dp[j] + 1 == dp[i]){
+                        //此处不能是++
+                        gp[i] += gp[j];
+                    }
+                }
+            }
+        }
+        int res = 0;
+        int max = 1;
+        for (int i = 0; i < nums.length; i ++){
+            if (max < dp[i]){
+                res = gp[i];
+                max = dp[i];
+            }else if (max == dp[i]){
+                res += gp[i];
+            }
+        }
+        return res;
+    }
+
+    public int fun(String str){
+        int length = str.length();
+        int res = 0;
+        for (int i = length - 1; i > 1; i--){
+            char c = str.charAt(i);
+            int tem = c - '0';
+            if (tem >= 10) {
+                tem = c - 'A' + 1;
+            }
+            res += tem;
+        }
+        return res;
+    }
+
+    //
+    public static int[] findTwoNumber(int number){
+        int n1 = number / 2;
+        int n2 = number - n1;
+        while (!f(n1) || !f(n2) && n1 > 0){
+            n1 -= 1;
+            n2 += 1;
+        }
+        return new int[]{n1,n2};
+    }
+
+    //判断一个数是否为素数
+    public static boolean f(int num){
+        if(num == 1 || num == 2) return true;
+        int f = num / 2;
+        int n1 = f;
+        int n2 = 2;
+        while (n1 * n2 != num){
+            if (n2 > f){
+                return true;
+            }
+            n2++;
+            n1 = num / n2;
+        }
+        return false;
+    }
+
+    //字符倒序
+    public String revert(String s){
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = s.length() - 1; i >= 0; i--){
+            stringBuilder.append(s.charAt(i));
+        }
+        return stringBuilder.toString();
+    }
+
+    //ip地址转为整数
+    public String revertIp(String s){
+        String[] strings = s.split("\\.");
+        String res = null;
+        if (strings.length == 1){
+            StringBuilder stringBuilder = new StringBuilder();
+            long i = Long.parseLong(s);
+            long i1 = (i & 0xff000000) >>> 24;
+            long i2 = (i & 0x00ff0000) >>> 16;
+            long i3 = (i & 0x0000ff00) >>> 8;
+            long i4 = i & 0x000000ff;
+            stringBuilder.append(i1).append('.').append(i2).append('.').append(i3).append('.').append(i4);
+            res = stringBuilder.toString();
+        }else {
+            long i1 = Long.parseLong(strings[0]);
+            long i2 = Long.parseLong(strings[1]);
+            long i3 = Long.parseLong(strings[2]);
+            long i4 = Long.parseLong(strings[3]);
+            i1 = i1 << 24;
+            i2 = i2 << 16;
+            i3 = i3 << 8;
+            res = Long.toString(i1 | i2 | i3 | i4);
+        }
+
+        return res;
+    }
+
+    //统计Ascii码种数
+    public int count(String s){
+        int length = s.length();
+        int[] dp = new int[127];
+        int res = 0;
+        for (int i = 0; i < length; i++){
+            char c = s.charAt(i);
+            if (c == '\n' || c > 127){
+                continue;
+            }
+            if (dp[c] == 0){
+                dp[c] = 1;
+                res++;
+            }
+        }
+        return res;
+    }
+
+    //验证密码合规程序
+    /**
+     * 密码要求:
+     *
+     * 1.长度超过8位
+     *
+     * 2.包括大小写字母.数字.其它符号,以上四种至少三种
+     *
+     * 3.不能有长度大于2的包含公共元素的子串重复 （注：其他符号不含空格或换行）
+     */
+
+    public static boolean passwordVerify(String s){
+        int length = s.length();
+        if (length <= 8) return false;
+        int sum = 0;
+        int[] dp = new int[4];
+        for (int i = 0; i < length; i++){
+            char c = s.charAt(i);
+            if (c >= 'a' && c <= 'z' ){
+                if (dp[0] == 0){
+                    dp[0] = 1;
+                    sum++;
+                }
+            }else if (c >= 'A' && c <= 'Z'){
+                if (dp[1] == 0){
+                    dp[1] = 1;
+                    sum++;
+                }
+            }else if (c >= '0' && c <= '9'){
+                if (dp[2] == 0){
+                    dp[2] = 1;
+                    sum++;
+                }
+            }else if (dp[3] == 0){
+                dp[3] = 1;
+                sum++;
+            }
+        }
+        if (sum < 3) return false;
+        int left = 0;
+        int right = 3;
+        HashMap<String, Integer> hashSet = new HashMap<>();
+        while (right < length){
+            String s1 = s.substring(left, right);
+            if (hashSet.containsKey(s1) && left - hashSet.get(s1) > 3){
+                return false;
+            }
+            if (!hashSet.containsKey(s1)){
+                hashSet.put(s1, left);
+            }
+            left++;
+            right++;
+        }
+        return true;
+    }
+
+    //华为机试，明明的随机数，输入的随机数为
+    public List<Integer> random(List<Integer> list){
+        int[] nums = new int[500];
+        for (int i = 0; i < list.size(); i++){
+            int a = list.get(i);
+            if (nums[a] == 0){
+                nums[a] = 1;
+            }
+        }
+        List<Integer> res = new LinkedList<>();
+        for (int i = 1; i < 500; i++){
+            if (nums[i] == 1){
+                res.add(i);
+            }
+        }
+        return res;
+    }
+
+    //华为计试，成绩排名
+    public static class Student{
+        public String name;
+        public int record;
+        public Student(String name, int record){
+            this.name = name;
+            this.record = record;
+        }
+    }
+
+    public static void sort(Student[] students, boolean b){
+        Arrays.sort(students, new Comparator<Student>() {
+            @Override
+            public int compare(Student o1, Student o2) {
+                if (b){
+                    return Integer.compare(o1.record, o2.record);
+                }else {
+                    return Integer.compare(o2.record, o1.record);
+                }
+
+            }
+        });
+        int length = students.length;
+        for (Student student : students) {
+            System.out.print(student.name + ' ');
+            System.out.println(student.record);
+        }
+    }
+
+    //华为机试，坐标移动
+    public void zuobiao(String[] list){
+        int length = list.length;
+        Pattern pattern = Pattern.compile("[AWSD]\\d[\\d]?");
+        Matcher matcher = null;
+        int x = 0;
+        int y = 0;
+        for (String str : list) {
+            matcher = pattern.matcher(str);
+            if (matcher.matches()) {
+                char c = str.charAt(0);
+                int num = Integer.parseInt(str.substring(1));
+                if (c == 'A') {
+                    x -= num;
+                } else if (c == 'D') {
+                    x += num;
+                } else if (c == 'W') {
+                    y += num;
+                } else {
+                    y -= num;
+                }
+            }
+        }
+        System.out.println(x + "," + y);
+    }
+
+    //华为机试，素数伴侣
 
 }

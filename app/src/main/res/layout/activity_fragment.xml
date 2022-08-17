@@ -4,14 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ActivityA">
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/button3"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:text="jump to MainActivity"
-        />
+    tools:context=".page.FragmentActivity">
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.myapplication">
-    <queries>
-        <package android:name="com.example.myapplication2"/>
-    </queries>
 
     <application
         android:allowBackup="true"
@@ -13,12 +10,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
         <activity
-            android:launchMode="singleInstance"
-            android:name=".ActivityA"
+            android:name=".page.FragmentActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivityA"
-            android:launchMode="singleInstance"
+            android:name=".page.MVVMActivity"
+            android:exported="false" />
+        <activity
+            android:name=".page.RecycleViewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".page.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

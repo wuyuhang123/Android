@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">吴羽航</string>
+    <string name="hello_blank_fragment">hello ! fragment</string>
+    <string name="request_call_permission">请求电话权限</string>
 </resources>

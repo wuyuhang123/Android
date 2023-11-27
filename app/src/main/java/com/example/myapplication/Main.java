@@ -4,22 +4,197 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.ObservableEmitter;
+import io.reactivex.rxjava3.core.ObservableOnSubscribe;
+import io.reactivex.rxjava3.core.ObservableSource;
+import io.reactivex.rxjava3.functions.BiFunction;
+import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.functions.Function;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println();
-        Main main = new Main();
-        main.maximalSquare(new char[][]{{'1', '0', '1', '0', '0'}, {'1', '0', '1', '1', '1'},{'1', '1', '1', '1', '1'},{'1', '0', '0', '1', '0'}});
-        main.findNumberOfLIS(new int[]{1,2,4,3,5,4,7,2});
-        Main.findTwoNumber(20);
-        String s = main.revertIp("10.0.3.193");
-        main.revertIp(String.valueOf(167969729));
-        main.zuobiao("A10;S20;W10;D30;X;A1A;B10A11;;A10;".split(";"));
+        toList();
+    }
+
+    public static void toList() {
+        Observable<Integer> observable = Observable.create(new ObservableOnSubscribe<Integer>() {
+            @Override
+            public void subscribe(@NonNull ObservableEmitter<Integer> emitter) throws Throwable {
+                emitter.onNext(1);
+                System.out.println("1");
+                Thread.sleep(2000);
+                emitter.onNext(2);
+                System.out.println("2");
+                Thread.sleep(2000);
+                emitter.onNext(3);
+                System.out.println("3");
+                emitter.onNext(4);
+                emitter.onComplete();
+            }
+        });
+        observable.toList().subscribe(new Consumer<List<Integer>>() {
+            @Override
+            public void accept(List<Integer> list) throws Throwable {
+                for (int i = 0; i < list.size(); i++) {
+                    System.out.println(i);
+                }
+            }
+        });
+    }
+
+    public static void combineLatest() {
+        List<Integer> integers = new ArrayList<Integer>();
+        for (int i = 0; i < 10; i++) {
+            integers.add(i);
+        }
+        List<Character> characters = new ArrayList<Character>();
+        for (int i = 0; i < 8; i++) {
+            characters.add((char)('a' + i));
+        }
+        Observable<Integer> observable1 = Observable.fromIterable(integers).delay(2000, TimeUnit.MILLISECONDS);
+        Observable<Character> observable2 = Observable.fromIterable(characters);
+        Observable.combineLatest(observable1, observable2, new BiFunction<Integer, Character, String>() {
+            @Override
+            public String apply(Integer integer, Character character) throws Throwable {
+                return character + "" + integer;
+            }
+        }).subscribe(new Consumer<String>() {
+            @Override
+            public void accept(String s) throws Throwable {
+                System.out.println(s);
+            }
+        });
+        while (true) {
+
+        }
+    }
+
+    public static void zip() {
+        List<Integer> integers = new ArrayList<Integer>();
+        for (int i = 0; i < 10; i++) {
+            integers.add(i);
+        }
+        List<Character> characters = new ArrayList<Character>();
+        for (int i = 0; i < 8; i++) {
+            characters.add((char)('a' + i));
+        }
+        Observable<Integer> observable1 = Observable.fromIterable(integers);
+        Observable<Character> observable2 = Observable.fromIterable(characters);
+        Observable.zip(observable1, observable2, new BiFunction<Integer, Character, String>() {
+            @Override
+            public String apply(Integer integer, Character character) throws Throwable {
+                return character + "" + integer;
+            }
+        }).subscribe(new Consumer<String>() {
+            @Override
+            public void accept(String s) throws Throwable {
+                System.out.println(s);
+            }
+        });
+    }
+
+    private static void testMap() {
+        List<Integer> integers = new ArrayList<Integer>();
+        for (int i = 0; i < 10; i++) {
+            integers.add(i);
+        }
+
+        //map
+        Observable.fromIterable(integers).map(new Function<Integer, String>() {
+            @Override
+            public String apply(Integer integer) throws Throwable {
+                if (integer % 2 == 0) {
+                    return "lfs_" + integer;
+                }
+                return "wyh_" + integer;
+            }
+        }).subscribe(new Consumer<String>() {
+            @Override
+            public void accept(String s) throws Throwable {
+                System.out.println(s);
+            }
+        });
+    }
+
+    private static void testFlatMap() {
+        List<Integer> integers = new ArrayList<Integer>();
+        for (int i = 0; i < 10; i++) {
+            integers.add(i);
+        }
+
+        //flatMap
+        Observable.fromIterable(integers).flatMap(new Function<Integer, ObservableSource<?>>() {
+            @Override
+            public ObservableSource<?> apply(Integer integer) throws Throwable {
+                if (integer % 2 == 0) {
+                    return Observable.just("wyh_" + integer).delay(2000, TimeUnit.MILLISECONDS);
+                }
+                return Observable.just("wyh_odd_" + integer).delay(200, TimeUnit.MILLISECONDS);
+            }
+        }).cast(String.class).subscribe(new Consumer<String>() {
+            @Override
+            public void accept(String s) throws Throwable {
+                System.out.println(s);
+            }
+        });
+
+        while (true) {
+
+        }
+    }
+
+    private static void testConcatMap() {
+        List<Integer> integers = new ArrayList<Integer>();
+        for (int i = 0; i < 10; i++) {
+            integers.add(i);
+        }
+
+        //concatMap
+        Observable.fromIterable(integers).concatMap(new Function<Integer, ObservableSource<?>>() {
+            @Override
+            public ObservableSource<?> apply(Integer integer) throws Throwable {
+                if (integer % 2 == 0) {
+                    return Observable.just("wyh_" + integer).delay(2000, TimeUnit.MILLISECONDS);
+                }
+                return Observable.just("wyh_odd_" + integer).delay(200, TimeUnit.MILLISECONDS);
+            }
+        }).cast(String.class).subscribe(new Consumer<String>() {
+            @Override
+            public void accept(String s) throws Throwable {
+                System.out.println(s);
+            }
+        });
+
+        //flatMap
+        Observable.fromIterable(integers).flatMap(new Function<Integer, ObservableSource<?>>() {
+            @Override
+            public ObservableSource<?> apply(Integer integer) throws Throwable {
+                if (integer % 2 == 0) {
+                    return Observable.just("wyh_" + integer).delay(2000, TimeUnit.MILLISECONDS);
+                }
+                return Observable.just("wyh_odd_" + integer).delay(200, TimeUnit.MILLISECONDS);
+            }
+        }).cast(String.class).subscribe(new Consumer<String>() {
+            @Override
+            public void accept(String s) throws Throwable {
+                System.out.println(s);
+            }
+        });
+
+        while (true) {
+
+        }
     }
 
     public class TreeNode {
@@ -139,6 +314,13 @@ public class Main {
         }
     }
 
+    /**
+     * 二分
+     * @param nums
+     * @param left
+     * @param right
+     * @return
+     */
     public int fun(int[] nums, int left, int right){
         if (left == right){
             return left;
@@ -1090,6 +1272,57 @@ public class Main {
         System.out.println(x + "," + y);
     }
 
-    //华为机试，素数伴侣
+
+    public static List<List<Integer>> baidu(int[] nums, int target) {
+        Arrays.sort(nums);
+        List<Integer> list = new ArrayList<Integer>();
+        List<List<Integer>> result = new LinkedList<>();
+        for (int i = 0; i < nums.length; i++) {
+            int n = target - nums[i];
+            if (list.size() != 0 && n == list.get(0)) {
+                continue;
+            }
+            if (list.size() != 0) {
+                list.remove(0);
+            }
+            list.add(n);
+            for (int j = i + 1; j < nums.length; j++) {
+                int m = nums[j];
+                if (m == n) {
+                    List<Integer> linkedList = new LinkedList<>();
+                    linkedList.add(nums[i]);
+                    linkedList.add(m);
+                    result.add(linkedList);
+                    break;
+                } else if (m > n) {
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

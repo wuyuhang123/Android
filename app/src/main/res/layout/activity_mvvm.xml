@@ -1,9 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".page.MVVMActivity">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <import type="java.util.Date"/>
+        <variable
+            name="swordsman"
+            type="com.example.myapplication.mvvm.model.Swordsman" />
+        <variable
+            name="onClickListener"
+            type="android.view.View.OnClickListener" />
+        <variable
+            name="date"
+            type="Date" />
+        <variable
+            name="obSwordsman"
+            type="com.example.myapplication.mvvm.model.ObSwordsman" />
+        <variable
+            name="updateObSwordsman"
+            type="android.view.View.OnClickListener" />
+        <variable
+            name="resetButton"
+            type="android.view.View.OnClickListener" />
+    </data>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="30dp"
+            android:text="@{swordsman.name}"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="30dp"
+            android:text="@{swordsman.level}"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{date}"
+            />
+
+        <Button
+            android:text="测试MVVM按钮"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="30dp"
+            android:onClick="@{onClickListener}"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{obSwordsman.name}"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{obSwordsman.level}"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="update obSwordsman"
+            android:onClick="@{updateObSwordsman}"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{obSwordsman.name}"
+            />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@={obSwordsman.name}"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="reset obSwordsman"
+            android:onClick="@{resetButton}"
+            />
+
+    </LinearLayout>
+</layout>

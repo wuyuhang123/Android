@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.myapplication">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,16 +13,33 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
         <activity
+            android:name=".page.RxjavaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".page.CustomViewActivity"
+            android:exported="false" />
+        <activity android:name=".page.PermissionActivity" />
+        <activity
+            android:name=".page.TestServiceActivity"
+            android:exported="false" />
+
+        <service
+            android:name=".service.MyService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity
             android:name=".page.FragmentActivity"
             android:exported="false" />
         <activity
             android:name=".page.MVVMActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleInstance" />
         <activity
             android:name=".page.RecycleViewActivity"
             android:exported="false" />
         <activity
-            android:name=".page.MainActivity"
+            android:name=".page.MyMainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

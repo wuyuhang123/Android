@@ -1,9 +1,9 @@
 package com.example.myapplication.network;
 
 import io.reactivex.rxjava3.core.Observable;
-import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.POST;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 /**
  * @Author wuyuhang
@@ -11,7 +11,9 @@ import retrofit2.http.POST;
  * @Describe
  */
 public interface IpServiceForPost {
-    @FormUrlEncoded
-    @POST("getIpInfo.php")
-    Observable<IpModel> getIpMsg(@Field("ip") String first);
+
+    @GET("self")
+    Observable<IpModel<IpData>> getIpMsg(@Query("ip") String first,
+                                         @Query("app_id") String appId,
+                                         @Query("app_secret") String appSecret);
 }

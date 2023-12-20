@@ -2,16 +2,31 @@ package com.example.myapplication.service;
 
 import android.app.Service;
 import android.content.Intent;
-import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.os.RemoteException;
 import android.util.Log;
+
+import com.example.myapplication.Book;
+import com.example.myapplication.IBookManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MyService extends Service {
 
     public static final String TAG = MyService.class.getSimpleName();
     public Handler handler;
+    private final List<Book> books = new ArrayList<>();
+
+    private IBookManager.Stub iBookManager = new IBookManager.Stub() {
+        @Override
+        public void addBook(Book inBook1, Book inBook2) throws RemoteException {
+            Log.i(TAG, "service addBook" + inBook1.toString());
+            books.add(inBook1);
+        }
+    };
 
     public MyService() {
     }
@@ -26,7 +41,7 @@ public class MyService extends Service {
 //                Log.e(TAG, "onBind: stopSelf");
 //            }
 //        }, 3000);
-        return null;
+        return iBookManager;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.leetcode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,6 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,8 +25,9 @@ import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.functions.Function;
 
 public class Main {
+
     public static void main(String[] args) {
-        toList();
+
     }
 
     public static void toList() {
@@ -216,14 +219,14 @@ public class Main {
         }
     }
 
-    public class ListNode {
+    public static class ListNode {
         int val;
         ListNode next;
 
         ListNode() {
         }
 
-        ListNode(int val) {
+        public ListNode(int val) {
             this.val = val;
         }
 

@@ -5,9 +5,9 @@ package com.example.myapplication.network;
  * @Date 2023/11/26 17:49
  * @Describe
  */
-public class IpModel {
+public class IpModel<T> {
     private int code;
-    private IpData data;
+    private T data;
 
     public void setCode(int code) {
         this.code = code;
@@ -17,11 +17,11 @@ public class IpModel {
         return code;
     }
 
-    public IpData getData() {
+    public T getData() {
         return data;
     }
 
-    public void setData(IpData data) {
+    public void setData(T data) {
         this.data = data;
     }
 }

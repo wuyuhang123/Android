@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ import java.util.List;
 
 public class PageListAdapter extends RecyclerView.Adapter<PageListViewHolder> implements View.OnClickListener, View.OnLongClickListener{
 
+    private static final String TAG = "PageListAdapter";
     private final List<PageData> list;
     private final Context mContext;
 
@@ -48,6 +50,12 @@ public class PageListAdapter extends RecyclerView.Adapter<PageListViewHolder> im
     public void onBindViewHolder(@NonNull PageListViewHolder holder, int position) {
         PageData pageData = list.get(position);
         TextView textView = holder.textView;
+        textView.post(new Runnable() {
+            @Override
+            public void run() {
+                Log.i(TAG, "onBindViewHolder: textView" + textView.getWidth() + "  " + textView.getHeight());
+            }
+        });
         textView.setText(pageData.getPageName());
         holder.itemView.setTag(position);
     }

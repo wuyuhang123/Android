@@ -6,12 +6,25 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
+        <activity
+            android:name=".AIDLActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChoreographerActivity"
+            android:exported="false" />
+
+        <receiver
+            android:name=".broadcast.MyReceiver"
+            android:enabled="true"
+            android:exported="true" />
+
         <activity
             android:name=".page.RxjavaActivity"
             android:exported="false" />
@@ -24,6 +37,7 @@
             android:exported="false" />
 
         <service
+            android:process=":service"
             android:name=".service.MyService"
             android:enabled="true"
             android:exported="true" />

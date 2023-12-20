@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.leetcode;
 
 import java.util.Arrays;
 import java.util.Random;

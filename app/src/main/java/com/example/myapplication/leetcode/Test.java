@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.leetcode;
 
 import android.os.Build;
 
@@ -22,28 +22,12 @@ public class Test {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public static void main(String[] args) {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int[][] nums = new int[][]{{1,1,1,1,0},{1,1,0,1,0},{1,1,0,0,0},{0,0,0,0,0}};
-        System.out.println(numIsland(nums));
-        Integer i = new Integer(1);
-        int i1 = 1;
-        boolean a = i == i1;
-        LinkedHashMap<Integer, Integer> hashMap = new LinkedHashMap<>();
-
-        ListNode l7 = new ListNode(5);
-        ListNode l6 = new ListNode(4, l7);
-        ListNode l5 = new ListNode(4, l6);
-        ListNode l4 = new ListNode(3, l5);
-        ListNode l3 = new ListNode(3, l4);
-        ListNode l2 = new ListNode(2, l3);
-        ListNode l1 = new ListNode(1, l2);
-        Test test = new Test();
-        test.deleteDuplicates(l1);
+        new Test().f();
     }
 
 
     /**
-     * 死锁示例, 结合f和f1
+     * 死锁示例, 结合f3和f4
      */
     public void f() {
         Test test = new Test();
@@ -77,6 +61,44 @@ public class Test {
                 synchronized (o2) {
                     System.out.println(Thread.currentThread() + "o2");
                     o2.wait();
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void f3(long time){
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        synchronized (o1){
+            try {
+                Thread.sleep(time);
+                System.out.println(Thread.currentThread().getName() + "o1");
+                synchronized (o2) {
+                    System.out.println(Thread.currentThread() + "o2");
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void f4(long time){
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        synchronized (o2){
+            try {
+                Thread.sleep(time);
+                System.out.println(Thread.currentThread().getName() + "o2");
+                synchronized (o1) {
+                    System.out.println(Thread.currentThread() + "o1");
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();

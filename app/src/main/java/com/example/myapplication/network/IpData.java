@@ -7,66 +7,36 @@ package com.example.myapplication.network;
  */
 public class IpData {
 
-    private String country;
-    private String country_id;
-    private String area;
-    private String area_id;
-    private String region;
-    private String region_id;
-    private String city;
-    private String city_id;
-    private String county;
-    private String county_id;
-    private String isp;
-    private String isp_id;
     private String ip;
+    private String province;
+    private String code;
+    private String city;
+    private String cityId;
+    private String isp;
+    private String desc;
 
-    public String getArea() {
-        return area;
+    public String getIp() {
+        return ip;
     }
 
-    public void setArea(String area) {
-        this.area = area;
+    public void setIp(String ip) {
+        this.ip = ip;
     }
 
-    public String getCountry() {
-        return country;
+    public String getProvince() {
+        return province;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
+    public void setProvince(String province) {
+        this.province = province;
     }
 
-    public String getCountry_id() {
-        return country_id;
+    public String getCode() {
+        return code;
     }
 
-    public void setCountry_id(String country_id) {
-        this.country_id = country_id;
-    }
-
-    public String getArea_id() {
-        return area_id;
-    }
-
-    public void setArea_id(String area_id) {
-        this.area_id = area_id;
-    }
-
-    public String getRegion() {
-        return region;
-    }
-
-    public void setRegion(String region) {
-        this.region = region;
-    }
-
-    public String getRegion_id() {
-        return region_id;
-    }
-
-    public void setRegion_id(String region_id) {
-        this.region_id = region_id;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getCity() {
@@ -77,28 +47,12 @@ public class IpData {
         this.city = city;
     }
 
-    public String getCity_id() {
-        return city_id;
+    public String getCityId() {
+        return cityId;
     }
 
-    public void setCity_id(String city_id) {
-        this.city_id = city_id;
-    }
-
-    public String getCounty() {
-        return county;
-    }
-
-    public void setCounty(String county) {
-        this.county = county;
-    }
-
-    public String getCounty_id() {
-        return county_id;
-    }
-
-    public void setCounty_id(String county_id) {
-        this.county_id = county_id;
+    public void setCityId(String cityId) {
+        this.cityId = cityId;
     }
 
     public String getIsp() {
@@ -109,19 +63,11 @@ public class IpData {
         this.isp = isp;
     }
 
-    public String getIsp_id() {
-        return isp_id;
+    public String getDesc() {
+        return desc;
     }
 
-    public void setIsp_id(String isp_id) {
-        this.isp_id = isp_id;
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 }

@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.AIDLActivity;
+import com.example.myapplication.ChoreographerActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.recycleView.adapter.PageListAdapter;
 import com.example.myapplication.recycleView.data.PageData;
@@ -44,7 +46,6 @@ public class MyMainActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mAdapter = new PageListAdapter(getData(), this);
         mRecyclerView.setAdapter(mAdapter);
-        // TODO: 2022/8/17 需要补充各item之间的分割线
         mRecyclerView.addItemDecoration(new MyItemDecoration(this, LinearLayoutManager.VERTICAL));
     }
 
@@ -58,6 +59,8 @@ public class MyMainActivity extends AppCompatActivity {
         list.add(new PageData("TestService Page", TestServiceActivity.class));
         list.add(new PageData("CustomView Page", CustomViewActivity.class));
         list.add(new PageData("Rxjava Page", RxjavaActivity.class));
+        list.add(new PageData("Choreographer Page", ChoreographerActivity.class));
+        list.add(new PageData("AIDL Page", AIDLActivity.class));
         return list;
     }
 

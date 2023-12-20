@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.myapplication.R;
+import com.example.myapplication.network.IpData;
 import com.example.myapplication.network.IpModel;
 import com.example.myapplication.network.IpServiceForPost;
 import com.example.myapplication.utils.Constants;
@@ -67,24 +68,24 @@ public class RxjavaActivity extends AppCompatActivity {
     }
 
     private void retrofit(String ip) {
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(Constants.BASE_ALI_URL)
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(Constants.BASE_IP_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                 .build();
         IpServiceForPost ipServiceForPost = retrofit.create(IpServiceForPost.class);
-        ipServiceForPost.getIpMsg(ip)
+        ipServiceForPost.getIpMsg(ip, Constants.APP_ID, Constants.SECRET_KEY)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<IpModel>() {
+                .subscribe(new Observer<IpModel<IpData>>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
 
             }
 
             @Override
-            public void onNext(@NonNull IpModel ipModel) {
-                String country = ipModel.getData().getCountry();
-                Toast.makeText(RxjavaActivity.this, country, Toast.LENGTH_SHORT).show();
+            public void onNext(@NonNull IpModel<IpData> ipModel) {
+                String city = ipModel.getData().getCity();
+                Toast.makeText(RxjavaActivity.this, city, Toast.LENGTH_SHORT).show();
             }
 
             @Override

@@ -1,20 +1,30 @@
 package com.example.myapplication.page;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Process;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.asynclayoutinflater.view.AsyncLayoutInflater;
+import androidx.core.view.LayoutInflaterCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.AIDLActivity;
-import com.example.myapplication.ChoreographerActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.recycleView.adapter.PageListAdapter;
 import com.example.myapplication.recycleView.data.PageData;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,6 +42,25 @@ public class MyMainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        LayoutInflaterCompat.setFactory2(getLayoutInflater(), new LayoutInflater.Factory2() {
+            @Nullable
+            @Override
+            public View onCreateView(@Nullable View parent, @NonNull String name, @NonNull Context context, @NonNull AttributeSet attrs) {
+                long startTime = System.currentTimeMillis();
+                TextView textView = null;
+                if ("TextView".equals(name)) {
+                    textView = (TextView) getDelegate().createView(parent, name, context, attrs);
+                    Log.d(TAG, "textView create costTime: " + (System.currentTimeMillis() - startTime));
+                }
+                return textView;
+            }
+
+            @Nullable
+            @Override
+            public View onCreateView(@NonNull String name, @NonNull Context context, @NonNull AttributeSet attrs) {
+                return null;
+            }
+        });
         super.onCreate(savedInstanceState);
         Log.e(TAG, "onCreate");
         Log.e(TAG, String.valueOf(Process.myPid()));
@@ -39,14 +68,26 @@ public class MyMainActivity extends AppCompatActivity {
     }
 
     private void init(){
-        setContentView(R.layout.activity_main);
-        mRecyclerView = findViewById(R.id.main_recycle_view);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(linearLayoutManager);
+//        setContentView(R.layout.activity_main);
+        new AsyncLayoutInflater(this).inflate(R.layout.activity_main, null, new AsyncLayoutInflater.OnInflateFinishedListener() {
+            @Override
+            public void onInflateFinished(@NonNull View view, int resid, @Nullable ViewGroup parent) {
+                setContentView(view);
+                mRecyclerView = findViewById(R.id.main_recycle_view);
+                mRecyclerView.setAdapter(mAdapter);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MyMainActivity.this);
+                linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                mRecyclerView.setLayoutManager(linearLayoutManager);
+                mRecyclerView.addItemDecoration(new MyItemDecoration(MyMainActivity.this, LinearLayoutManager.VERTICAL));
+            }
+        });
         mAdapter = new PageListAdapter(getData(), this);
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addItemDecoration(new MyItemDecoration(this, LinearLayoutManager.VERTICAL));
+        //该方法可以dump当前内存的对象至文件中
+        try {
+            Debug.dumpHprofData(getExternalCacheDir().getAbsolutePath() + "/dump");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     //在此处添加各种测试用页面
@@ -61,6 +102,7 @@ public class MyMainActivity extends AppCompatActivity {
         list.add(new PageData("Rxjava Page", RxjavaActivity.class));
         list.add(new PageData("Choreographer Page", ChoreographerActivity.class));
         list.add(new PageData("AIDL Page", AIDLActivity.class));
+        list.add(new PageData("TestLeakCanary Page", TestLeakCanaryActivity.class));
         return list;
     }
 

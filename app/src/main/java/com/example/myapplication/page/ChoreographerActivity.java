@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.page;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +8,8 @@ import android.os.HandlerThread;
 import android.util.Log;
 import android.view.Choreographer;
 import android.view.View;
+
+import com.example.myapplication.R;
 
 public class ChoreographerActivity extends AppCompatActivity {
 

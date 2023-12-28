@@ -2,6 +2,7 @@ package com.example.myapplication.page;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.example.myapplication.network.IpData;
 import com.example.myapplication.network.IpModel;
 import com.example.myapplication.network.IpServiceForPost;
 import com.example.myapplication.utils.Constants;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.io.IOException;
 
@@ -23,7 +25,6 @@ import io.reactivex.rxjava3.core.ObservableEmitter;
 import io.reactivex.rxjava3.core.ObservableOnSubscribe;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -41,6 +42,7 @@ public class RxjavaActivity extends AppCompatActivity {
 
     private Button button1;
     private Button button2;
+    private SimpleDraweeView simpleDraweeView;
     private OkHttpClient mOkHttpClient;
 
     @Override
@@ -49,6 +51,7 @@ public class RxjavaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_rxjava);
         button1 = findViewById(R.id.button1);
         button2 = findViewById(R.id.button2);
+        simpleDraweeView = findViewById(R.id.image1);
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,6 +64,8 @@ public class RxjavaActivity extends AppCompatActivity {
                 retrofit("59.108.54.37");
             }
         });
+        simpleDraweeView.setImageURI(Uri.parse("http://www.baidu.com/img/bdlogo.png"), null);
+
     }
 
     private void OKHttp(String ip) {
@@ -145,7 +150,7 @@ public class RxjavaActivity extends AppCompatActivity {
                     @Override
                     public void onNext(@NonNull String s) {
                         Log.d(TAG, "onNext: " + s);
-                        Toast.makeText(RxjavaActivity.this, "请求成功", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RxjavaActivity.this, s, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override

@@ -14,10 +14,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
         <activity
+            android:name=".page.TestLeakCanaryActivity"
+            android:exported="false" />
+        <activity
             android:name=".AIDLActivity"
             android:exported="false" />
         <activity
-            android:name=".ChoreographerActivity"
+            android:name=".page.ChoreographerActivity"
             android:exported="false" />
 
         <receiver
@@ -37,10 +40,10 @@
             android:exported="false" />
 
         <service
-            android:process=":service"
             android:name=".service.MyService"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true"
+            android:process=":service" />
 
         <activity
             android:name=".page.FragmentActivity"

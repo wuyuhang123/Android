@@ -3,6 +3,7 @@ package com.example.myapplication.leetcode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -26,7 +27,7 @@ import io.reactivex.rxjava3.functions.Function;
 public class LeetCode20231127 {
 
     public static void main(String[] args) {
-        new LeetCode20231127().search(new int[]{4,5,6,7,0,1,2}, 0);
+        new LeetCode20231127().merge(new int[][]{{1,3},{2,6},{8,10},{15,18}});
     }
 
     public void fun() {
@@ -605,6 +606,136 @@ public class LeetCode20231127 {
         nums[right] = tem;
     }
 
+    /**
+     * 排序链表，归并排序可以做到n log n的时间复杂度，且空间复杂度为1.
+     * 但是迭代法比较难，还是直接递归实现
+      * @param head
+     * @return
+     */
+    public ListNode sortList(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode slow = head;
+        ListNode fast = head.next;
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        ListNode left = head;
+        ListNode right = slow.next;
+        slow.next = null;
+        left = sortList(left);
+        right = sortList(right);
+        ListNode res = new ListNode();
+        ListNode tem = res;
+        while (left != null || right != null) {
+            if (left == null) {
+                tem.next = right;
+                right = right.next;
+            } else if (right == null) {
+                tem.next = left;
+                left = left.next;
+            } else {
+                if (left.val <= right.val) {
+                    tem.next = left;
+                    left = left.next;
+                } else {
+                    tem.next = right;
+                    right = right.next;
+                }
+            }
+            tem = tem.next;
+        }
+        ListNode realRes = res.next;
+        res.next = null;
+        return realRes;
+    }
+
+    /**
+     * 面积最大正方形 动态规划，二维数组，dp数组的某个点表示以该点为正方形右下角时的最大边长
+     * @param matrix
+     * @return
+     */
+    public int maximalSquare(char[][] matrix) {
+        int[][] dp = new int[matrix.length][matrix[0].length];
+        int max = 0;
+        for (int i = 0; i < matrix.length; i++) {
+            dp[i][0] = matrix[i][0] == '1' ? 1 : 0;
+            max = Math.max(max, dp[i][0]);
+        }
+        for (int i = 0; i < matrix[0].length; i++) {
+            dp[0][i] = matrix[0][i] == '1' ? 1 : 0;
+            max = Math.max(max, dp[0][i]);
+        }
+        for (int i = 1; i < matrix.length; i++) {
+            for (int j = 1; j < matrix[0].length; j++) {
+                if (matrix[i][j] == '0') {
+                    dp[i][j] = (matrix[i][j] == '1' ? 1 : 0);
+                } else {
+                    dp[i][j] = Math.min(Math.min(dp[i - 1][j], dp[i - 1][j -1]), dp[i][j - 1]) + 1;
+                }
+                max = Math.max(dp[i][j], max);
+            }
+        }
+        return max * max;
+    }
+
+    /**
+     * 合并区间
+     * @param intervals
+     * @return
+     */
+    public int[][] merge(int[][] intervals) {
+        Arrays.sort(intervals, (o1, o2) -> Integer.compare(o1[0], o2[0]));
+        LinkedList<int[]> list = new LinkedList<>();
+        int left = intervals[0][0];
+        int right = intervals[0][1];
+        for (int i = 1; i < intervals.length; i++) {
+            if (right < intervals[i][0]) {
+                int[] tem = new int[2];
+                tem[0] = left;
+                tem[1] = right;
+                list.add(tem);
+                left = intervals[i][0];
+                right = intervals[i][1];
+            } else {
+                right = Math.max(intervals[i][1], right);
+            }
+        }
+        int[] tem = new int[2];
+        tem[0] = left;
+        tem[1] = right;
+        list.add(tem);
+        return list.toArray(new int[][]{});
+    }
+
+    /**
+     * 验证搜索二叉树 按照二叉搜索树应该有的遍历顺序来做递归，pre指向上一个被访问的节点。
+     * @param root
+     * @return
+     */
+    Integer pre;
+    public boolean isValidBST(TreeNode root) {
+        // 结束条件：如果root为null，返回true。
+        // 因为空的二叉搜索树也是符合条件的
+        if (root == null) return true;
+        // 中序遍历：左根右
+        // 递归左子树，获取结果
+        boolean left = isValidBST(root.left);
+        // 如果当前节点的值大于等于中序序列中上一个值，证明不是二叉搜索树
+        // 如果pre为null，证明pre还没有初始化所以首先将pre初始化
+        if (pre != null && root.val <= pre){
+            return false;
+        }
+        // 如果当前节点小于中序序列上一个值，证明符合条件，更新pre为
+        // 当前值，继续判断下一个值，
+        pre = root.val;
+        // 递归右子树，获取结果
+        boolean right = isValidBST(root.right);
+        //    左右子树都是二叉搜索树，则返回true，否则返回false
+        return left && right;
+    }
 
 
 }

@@ -153,4 +153,6 @@ public class MyMainActivity extends AppCompatActivity {
         super.onDestroy();
         Log.e(TAG, "onDestroy");
     }
+
+
 }

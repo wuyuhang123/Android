@@ -28,4 +28,34 @@ class Kotlin(number: Int) {
     }
 
 
+    /**
+     * kotlin静态内部类
+     */
+    class KotlinStaticInner {
+
+        fun kotlinInnerTest() {
+            println("kotlin static inner test")
+        }
+
+        fun kotlinInnerTest2(): Int {
+            return 2;
+        }
+
+    }
+
+    /**
+     * kotlin非静态内部类
+     */
+    inner class KotlinInner {
+
+        fun kotlinInnerTest() {
+            println("kotlin inner test")
+        }
+
+        fun kotlinInnerTest2(): Int {
+            return 3;
+        }
+
+    }
+
 }
